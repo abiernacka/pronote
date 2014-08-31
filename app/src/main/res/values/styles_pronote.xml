@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- File created by the Android Action Bar Style Generator
+
+     Copyright (C) 2011 The Android Open Source Project
+     Copyright (C) 2012 readyState Software Ltd
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <style name="Theme.Pronote" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionBarItemBackground">@drawable/selectable_background_pronote</item>
+        <item name="popupMenuStyle">@style/PopupMenu.Pronote</item>
+        <item name="dropDownListViewStyle">@style/DropDownListView.Pronote</item>
+        <item name="actionBarTabStyle">@style/ActionBarTabStyle.Pronote</item>
+        <item name="actionDropDownStyle">@style/DropDownNav.Pronote</item>
+        <item name="actionBarStyle">@style/ActionBar.Solid.Pronote</item>
+        <item name="actionModeBackground">@drawable/cab_background_top_pronote</item>
+        <item name="actionModeSplitBackground">@drawable/cab_background_bottom_pronote</item>
+        <item name="actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Pronote</item>
+
+                <!-- Light.DarkActionBar specific -->
+        <item name="actionBarWidgetTheme">@style/Theme.Pronote.Widget</item>
+
+        <item name="android:editTextStyle">@style/EditTextpronote</item>
+
+        <item name="android:textColorHighlight">#99749acf</item>
+
+        <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewpronote</item>
+
+        <item name="android:checkboxStyle">@style/CheckBoxpronote</item>
+
+        <item name="android:radioButtonStyle">@style/RadioButtonpronote</item>
+
+        <item name="android:buttonStyle">@style/Buttonpronote</item>
+
+        <item name="android:imageButtonStyle">@style/ImageButtonpronote</item>
+
+        <item name="android:spinnerStyle">@style/Spinnerpronote</item>
+
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItempronote</item>
+
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBarpronote</item>
+
+        <item name="android:seekBarStyle">@style/SeekBarpronote</item>
+
+        <item name="android:ratingBarStyle">@style/RatingBarpronote</item>
+
+        <item name="android:ratingBarStyleIndicator">@style/RatingBarBigpronote</item>
+
+        <item name="android:ratingBarStyleSmall">@style/RatingBarSmallpronote</item>
+
+        <item name="android:buttonStyleToggle">@style/Togglepronote</item>
+
+        <item name="android:listViewStyle">@style/ListViewpronote</item>
+
+        <item name="android:listViewWhiteStyle">@style/ListViewpronote.White</item>
+
+        <item name="android:spinnerItemStyle">@style/SpinnerItempronote</item>
+
+    </style>
+
+
+    <style name="EditTextpronote" parent="android:Widget.EditText">
+  	  <item name="android:background">@drawable/pronote_edit_text_holo_light</item>
+  	  <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="AutoCompleteTextViewpronote" parent="android:Widget.AutoCompleteTextView">
+        <item name="android:dropDownSelector">@drawable/pronote_list_selector_holo_light</item>
+  	  <item name="android:background">@drawable/pronote_edit_text_holo_light</item>
+  	  <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="CheckBoxpronote" parent="android:Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/pronote_btn_check_holo_light</item>
+    </style>
+
+    <style name="RadioButtonpronote" parent="android:Widget.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/pronote_btn_radio_holo_light</item>
+    </style>
+
+    <style name="Buttonpronote" parent="android:Widget.Button">
+  	  <item name="android:background">@drawable/pronote_btn_default_holo_light</item>
+  	  <item name="android:minHeight">48dip</item>
+  	  <item name="android:minWidth">64dip</item>
+  	  <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="ImageButtonpronote" parent="android:Widget.ImageButton">
+  	  <item name="android:background">@drawable/pronote_btn_default_holo_light</item>
+    </style>
+
+    <style name="Spinnerpronote" parent="android:Widget.Spinner">
+        <item name="android:background">@drawable/pronote_spinner_background_holo_light</item>
+        <item name="android:dropDownSelector">@drawable/pronote_list_selector_holo_light</item>
+    </style>
+
+    <style name="SpinnerDropDownItempronote" parent="android:Widget.DropDownItem.Spinner">
+        <item name="android:checkMark">@drawable/pronote_btn_radio_holo_light</item>
+    </style>
+    <style name="Tabpronote">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+        <item name="android:background">@drawable/pronote_tab_indicator_holo</item>
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:minWidth">80dip</item>
+    </style>
+
+    <style name="TabTextpronote">
+  	  <item name="android:textColor">#000000</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <!-- v14 <item name="android:textAllCaps">true</item> -->
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:maxWidth">180dip</item>
+    </style>
+
+    <style name="ProgressBarpronote" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/pronote_progress_horizontal_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/pronote_progress_indeterminate_horizontal_holo_light</item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
+
+    <style name="SeekBarpronote" parent="android:Widget.SeekBar">
+        <item name="android:progressDrawable">@drawable/pronote_scrubber_progress_horizontal_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/pronote_scrubber_progress_horizontal_holo_light</item>
+        <item name="android:minHeight">13dip</item>
+        <item name="android:maxHeight">13dip</item>
+        <item name="android:thumb">@drawable/pronote_scrubber_control_selector_holo_light</item>
+        <item name="android:thumbOffset">16dip</item>
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+    </style>
+
+    <style name="RatingBarpronote" parent="android:Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/pronote_ratingbar_full_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/pronote_ratingbar_full_holo_light</item>
+    </style>
+
+    <style name="RatingBarBigpronote" parent="android:Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/pronote_ratingbar_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/pronote_ratingbar_holo_light</item>
+        <item name="android:minHeight">35dip</item>
+        <item name="android:maxHeight">35dip</item>
+    </style>
+
+    <style name="RatingBarSmallpronote" parent="android:Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/pronote_ratingbar_small_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/pronote_ratingbar_small_holo_light</item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
+
+    <style name="Togglepronote" parent="android:Widget.Button.Toggle">
+        <item name="android:background">@drawable/pronote_btn_toggle_holo_light</item>
+        <item name="android:minHeight">48dip</item>
+  	  <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="ListViewpronote" parent="android:Widget.ListView">
+        <item name="android:listSelector">@drawable/pronote_list_selector_holo_light</item>
+    </style>
+
+    <style name="ListViewpronote.White" parent="android:Widget.ListView.White">
+        <item name="android:listSelector">@drawable/pronote_list_selector_holo_light</item>
+    </style>
+
+    <style name="SpinnerItempronote" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="ActionBar.Solid.Pronote" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">@drawable/ab_solid_pronote</item>
+        <item name="backgroundStacked">@drawable/ab_stacked_solid_pronote</item>
+        <item name="backgroundSplit">@drawable/ab_bottom_solid_pronote</item>
+        <item name="progressBarStyle">@style/ProgressBar.Pronote</item>
+    </style>
+
+    <style name="ActionBar.Transparent.Pronote" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="background">@drawable/ab_transparent_pronote</item>
+        <item name="progressBarStyle">@style/ProgressBar.Pronote</item>
+    </style>
+	
+    <style name="PopupMenu.Pronote" parent="@style/Widget.AppCompat.PopupMenu">	
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_pronote</item>	
+    </style>
+	
+    <style name="DropDownListView.Pronote" parent="@style/Widget.AppCompat.ListView.DropDown">
+        <item name="android:listSelector">@drawable/selectable_background_pronote</item>
+    </style>
+
+    <style name="ActionBarTabStyle.Pronote" parent="@style/Widget.AppCompat.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_pronote</item>
+    </style>
+	
+    <style name="DropDownNav.Pronote" parent="@style/Widget.AppCompat.Spinner.DropDown.ActionBar">
+        <item name="android:background">@drawable/spinner_background_ab_pronote</item>
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_pronote</item>
+        <item name="android:dropDownSelector">@drawable/selectable_background_pronote</item>
+    </style>
+    
+    <style name="ProgressBar.Pronote" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_pronote</item>
+    </style>
+    
+    <style name="ActionButton.CloseMode.Pronote" parent="@style/Widget.AppCompat.ActionButton.CloseMode">
+        <item name="android:background">@drawable/btn_cab_done_pronote</item>
+    </style>
+    
+    <!-- this style is only referenced in a Light.DarkActionBar based theme -->
+    <style name="Theme.Pronote.Widget" parent="@style/Theme.AppCompat">
+        <item name="popupMenuStyle">@style/PopupMenu.Pronote</item>
+        <item name="dropDownListViewStyle">@style/DropDownListView.Pronote</item>
+    </style>
+
+</resources>

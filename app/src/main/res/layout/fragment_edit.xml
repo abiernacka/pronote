@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <EditText
+            android:id="@+id/title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/title" >
+        </EditText>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <EditText
+                android:id="@+id/editTextDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:editable="false"
+                android:clickable="true"
+                android:text="@string/DateStr" />
+
+            <EditText
+                android:id="@+id/editTextTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:editable="false"
+                android:clickable="true"
+                android:text="@string/TimeStr" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/body"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:editable="true"
+            android:hint="@string/body"
+            android:scrollbars="vertical" />
+
+        <CheckBox
+            android:id="@+id/checkboxPhoto"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/MakePhoto" />
+
+        <ImageView
+            android:id="@+id/imagePhoto"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_picture" />
+
+        <CheckBox
+            android:id="@+id/checkboxCall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/CallTo" />
+
+
+        <LinearLayout
+            android:id="@+id/viewCall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" >
+
+
+            <EditText
+                android:id="@+id/editTextCall"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.21"
+                android:inputType="phone" />
+
+            <Button
+                android:id="@+id/buttonCall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bt_contacts" />
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/checkboxSMS"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/SendSMS" />
+
+        <LinearLayout
+            android:id="@+id/viewSMS"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editTextSMS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5.24"
+                    android:inputType="phone" />
+
+                <Button
+                    android:id="@+id/buttonSMS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bt_contacts"
+                    android:onClick="buttonClick" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/editTextSMSText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine" />
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/checkboxRecord"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/RecordNote" />
+
+        <LinearLayout
+            android:id="@+id/viewRecord"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <Chronometer
+                android:id="@+id/chronometer"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="Chronometer" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
+
+                <Button
+                    android:id="@+id/buttonRecord"
+                    android:layout_width="78dp"
+                    android:layout_height="78dp"
+                    android:background="@drawable/bt_record" />
+
+                <Button
+                    android:id="@+id/buttonPlay"
+                    android:layout_width="78dp"
+                    android:layout_height="78dp"
+                    android:background="@drawable/bt_play" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

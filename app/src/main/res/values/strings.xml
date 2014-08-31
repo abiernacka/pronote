@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ProNote</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Add</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="no_notes">No Notes Yet</string>
+    <string name="menu_insert">Add Note</string>
+    <string name="menu_delete">Delete Note</string>
+    <string name="title">Note Title</string>
+    <string name="body">Text Content</string>
+    <string name="confirm">Confirm</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="CallTo">Make a call...</string>
+    <string name="MakePhoto">Make a photo...</string>
+    <string name="SendSMS">Send SMS...</string>
+    <string name="StartRecord">Start</string>
+    <string name="StopRecord">Stop</string>
+    <string name="PlayRecord">Play</string>
+    <string name="RecordNote">Record note...</string>
+    <string name="DateStr">Date</string>
+    <string name="TimeStr">Time</string>
+    <string name="preview_note">Preview Note</string>
+    <string name="text_ok">OK</string>
+    <string name="empty">&quot;    &quot;</string>
+    <string name="Bt_Phone_Str">Call</string>
+    <string name="SendSmsStr">Send SMS</string>
+    <string name="menu_edit">Edit Note</string>
+    <string name="NewPhoto">New Photo</string>
+    <string name="ProNoteUpcomingEvent">Upcoming event:</string>
+
+</resources>
