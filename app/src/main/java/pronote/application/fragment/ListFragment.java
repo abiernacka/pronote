@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -52,11 +53,14 @@ public class ListFragment extends Fragment {
         return rootView;
     }
 
+
   @Override
   public void onViewCreated(View view, Bundle saveInstanceState) {
     super.onViewCreated(view, saveInstanceState);
     ListView listView = (ListView) view.findViewById(R.id.list);
     adapter = new NotesAdapter(getActivity().getLayoutInflater());
+
+    listView.setOnItemClickListener(onItemClickListener);
     listView.setAdapter(adapter);
     new AsyncTask<Void, Void, List<Note>>() {
 
@@ -68,7 +72,6 @@ public class ListFragment extends Fragment {
         Cursor cursor = dbHelper.fetchAllNotes();
         getActivity().startManagingCursor(cursor);
         List<Note> items = getItems(cursor);
-        dbHelper.close();
         return items;
       }
 
@@ -85,6 +88,19 @@ public class ListFragment extends Fragment {
       }
     }.execute();
   }
+
+  private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+      PreviewFragment previewFragment = new PreviewFragment();
+      previewFragment.setNote(adapter.getItem(position));
+      getActivity().getSupportFragmentManager().beginTransaction()
+              .replace(R.id.container, previewFragment)
+              .addToBackStack(null)
+              .commit();
+    }
+  };
 
   private List<Note> getItems(Cursor mNotesCursor)
       {

@@ -7,11 +7,11 @@
     <string name="action_confirm">Confirm</string>
     <string name="no_notes">No Notes Yet</string>
     <string name="menu_insert">Add Note</string>
-    <string name="menu_delete">Delete Note</string>
+    <string name="menu_delete">Delete</string>
     <string name="title">Note Title</string>
     <string name="body">Text Content</string>
     <string name="confirm">Confirm</string>
-    <string name="edit_note">Edit Note</string>
+    <string name="edit_note">Edit</string>
     <string name="CallTo">Make a call...</string>
     <string name="MakePhoto">Make a photo...</string>
     <string name="SendSMS">Send SMS...</string>
@@ -29,5 +29,6 @@
     <string name="menu_edit">Edit Note</string>
     <string name="NewPhoto">New Photo</string>
     <string name="ProNoteUpcomingEvent">Upcoming event:</string>
+    <string name="untitled">Untitled</string>
 
 </resources>

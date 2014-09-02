@@ -21,6 +21,7 @@ import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -491,7 +492,11 @@ public class EditFragment extends Fragment {
                 @Override
                 protected void onPostExecute(Void result) {
                     getActivity().setProgressBarIndeterminateVisibility(false);
-                    getActivity().onBackPressed();
+                    FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+                      int backStackCount = supportFragmentManager.getBackStackEntryCount();
+                      for (int i = 0; i < backStackCount; i++) {
+                        supportFragmentManager.popBackStack();
+                      }
                 }
             }.execute(getUpdatedNote());
             return true;
