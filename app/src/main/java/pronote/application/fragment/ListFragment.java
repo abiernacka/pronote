@@ -5,6 +5,8 @@
  */
 package pronote.application.fragment;
 
+import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,10 +15,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.zip.Inflater;
 
 import pronote.application.R;
+import pronote.application.adapter.NotesAdapter;
+import pronote.application.db.NotesDbAdapter;
 import pronote.application.model.Note;
 
 /**
@@ -25,6 +33,8 @@ import pronote.application.model.Note;
  * @author miquido
  */
 public class ListFragment extends Fragment {
+
+  private NotesAdapter adapter;
 
     public ListFragment() {
     }
@@ -41,6 +51,76 @@ public class ListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         return rootView;
     }
+
+  @Override
+  public void onViewCreated(View view, Bundle saveInstanceState) {
+    super.onViewCreated(view, saveInstanceState);
+    ListView listView = (ListView) view.findViewById(R.id.list);
+    adapter = new NotesAdapter(getActivity().getLayoutInflater());
+    listView.setAdapter(adapter);
+    new AsyncTask<Void, Void, List<Note>>() {
+
+      @Override
+      protected List<Note> doInBackground(Void... params) {
+
+        NotesDbAdapter dbHelper = new NotesDbAdapter(getActivity());
+        dbHelper.open();
+        Cursor cursor = dbHelper.fetchAllNotes();
+        getActivity().startManagingCursor(cursor);
+        List<Note> items = getItems(cursor);
+        dbHelper.close();
+        return items;
+      }
+
+      @Override
+      protected void onPreExecute() {
+          getActivity().setProgressBarIndeterminateVisibility(true);
+      }
+
+      @Override
+      protected void onPostExecute(List<Note> result) {
+        adapter.setNotes(result);
+        adapter.notifyDataSetChanged();
+        getActivity().setProgressBarIndeterminateVisibility(false);
+      }
+    }.execute();
+  }
+
+  private List<Note> getItems(Cursor mNotesCursor)
+      {
+        List<Note> list = new ArrayList<Note>();
+
+      	mNotesCursor.moveToFirst();
+      	for(int i = 0; i < mNotesCursor.getCount(); i++) {
+          long rowId = mNotesCursor.getLong(mNotesCursor.getColumnIndexOrThrow(NotesDbAdapter.KEY_ROWID));
+      		String title = mNotesCursor.getString(mNotesCursor.getColumnIndexOrThrow(NotesDbAdapter.KEY_TITLE));
+          String body = mNotesCursor.getString(mNotesCursor.getColumnIndexOrThrow(NotesDbAdapter.KEY_BODY));
+      		String call = mNotesCursor.getString(mNotesCursor.getColumnIndexOrThrow(NotesDbAdapter.KEY_CALL_NUMBER));
+      		String sms = mNotesCursor.getString(mNotesCursor.getColumnIndexOrThrow(NotesDbAdapter.KEY_SMS_NUMBER));
+          String smsText = mNotesCursor.getString(mNotesCursor.getColumnIndexOrThrow(NotesDbAdapter.KEY_SMS_TEXT));
+          String recordPath = mNotesCursor.getString(mNotesCursor.getColumnIndexOrThrow(NotesDbAdapter.KEY_RECORD_PATH));
+          long dateTime = mNotesCursor.getLong(mNotesCursor.getColumnIndexOrThrow(NotesDbAdapter.KEY_DATE_TIME));
+          String photo = mNotesCursor.getString(mNotesCursor.getColumnIndexOrThrow(NotesDbAdapter.KEY_PHOTO));
+
+      		Note note = new Note();
+          note.setRowId(rowId);
+          note.setTitle(title);
+          note.setBody(body);
+          note.setCallNumber(call);
+          note.setSmsNumber(sms);
+          note.setSmsText(smsText);
+          note.setRecordPath(recordPath);
+          note.setDateTime(dateTime);
+          note.setPhoto(photo);
+
+          list.add(note);
+      		mNotesCursor.moveToNext();
+      	}
+
+      	return list;
+
+      }
+
 
 
     @Override
