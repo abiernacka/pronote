@@ -31,4 +31,8 @@
     <string name="ProNoteUpcomingEvent">Upcoming event:</string>
     <string name="untitled">Untitled</string>
 
+    <string name="elv_undo">Undo</string>
+   	<string name="elv_undo_all">Undo All</string>
+   	<string name="elv_item_deleted">Item deleted</string>
+   	<string name="elv_n_items_deleted">%1$s items deleted</string>
 </resources>

@@ -28,6 +28,7 @@ import pronote.application.R;
 import pronote.application.adapter.NotesAdapter;
 import pronote.application.db.NotesDbAdapter;
 import pronote.application.model.Note;
+import pronote.application.view.EnhancedListView;
 
 /**
  * TODO Add class description...
@@ -58,11 +59,66 @@ public class ListFragment extends Fragment {
   @Override
   public void onViewCreated(View view, Bundle saveInstanceState) {
     super.onViewCreated(view, saveInstanceState);
-    ListView listView = (ListView) view.findViewById(R.id.list);
+    EnhancedListView listView = (EnhancedListView) view.findViewById(R.id.list);
     adapter = new NotesAdapter(getActivity().getLayoutInflater());
 
     listView.setOnItemClickListener(onItemClickListener);
     listView.setAdapter(adapter);
+    listView.setDismissCallback(new EnhancedListView.OnDismissCallback() {
+                @Override
+                public EnhancedListView.Undoable onDismiss(EnhancedListView listView, final int position) {
+
+                    final Note item = adapter.getItem(position);
+                  new AsyncTask<Note, Void, Void>() {
+
+                                  @Override
+                                  protected Void doInBackground(Note... params) {
+                                      NotesDbAdapter dbHelper = new NotesDbAdapter(getActivity());
+                                      dbHelper.open();
+                                      dbHelper.deleteNote(item.getRowId());
+                                      return null;
+                                  }
+
+                                  @Override
+                                  protected void onPostExecute(Void result) {
+                                    List<Note> notes = adapter.getNotes();
+                                    notes.remove(item);
+                                    adapter.setNotes(notes);
+                                    adapter.notifyDataSetChanged();
+                                  }
+
+                              }.execute(item);
+                    return new EnhancedListView.Undoable() {
+                        @Override
+                        public void undo() {
+                          new AsyncTask<Note, Void, Void>() {
+
+                             @Override
+                             protected Void doInBackground(Note... params) {
+                               NotesDbAdapter dbHelper = new NotesDbAdapter(getActivity());
+                               dbHelper.open();
+                               dbHelper.createNote(item);
+                                 return null;
+                             }
+
+                             @Override
+                             protected void onPostExecute(Void result) {
+                               List<Note> notes = adapter.getNotes();
+                               notes.add(item);
+                               adapter.setNotes(notes);
+                               adapter.notifyDataSetChanged();
+                             }
+
+                         }.execute(item);
+                        }
+                    };
+                }
+            });
+    listView.enableSwipeToDismiss();
+    listView.setSwipeDirection(EnhancedListView.SwipeDirection.END);
+    listView.setSwipingLayout(R.id.card_view);
+
+
     new AsyncTask<Void, Void, List<Note>>() {
 
       @Override
