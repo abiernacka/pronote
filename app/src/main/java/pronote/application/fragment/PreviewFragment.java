@@ -30,6 +30,7 @@ import java.util.Date;
 import pronote.application.R;
 import pronote.application.db.NotesDbAdapter;
 import pronote.application.model.Note;
+import pronote.application.utils.Formatter;
 
 /**
  * TODO Add class description...
@@ -38,8 +39,6 @@ import pronote.application.model.Note;
  */
 public class PreviewFragment extends Fragment {
 
-  public static final String PATTERN_DATE = "dd-MM-yyyy";
-  public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(PATTERN_DATE);
     private static final String SERIALIZABLE_NOTE = "SERIALIZABLE_NOTE";
 
     private TextView editTextDate;
@@ -112,7 +111,7 @@ public class PreviewFragment extends Fragment {
         editTextSMS.setText(note.getSmsNumber());
         editTextSMSText.setText(note.getSmsText());
         if (note.getDateTime() != 0) {
-          editTextDate.setText(DATE_FORMAT.format(new Date(note.getDateTime())));
+          editTextDate.setText(Formatter.date(note.getDateTime()));
         } else {
           editTextDate.setVisibility(View.GONE);
         }

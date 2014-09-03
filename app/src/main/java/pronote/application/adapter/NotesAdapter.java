@@ -18,6 +18,7 @@ import java.util.List;
 
 import pronote.application.R;
 import pronote.application.model.Note;
+import pronote.application.utils.Formatter;
 
 /**
  * TODO Add class description...
@@ -25,9 +26,6 @@ import pronote.application.model.Note;
  * @author miquido
  */
 public class NotesAdapter extends BaseAdapter {
-
-  public static final String PATTERN_DATE = "dd-MM-yyyy";
-  public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(PATTERN_DATE);
 
     private List<Note> notes;
     private LayoutInflater inflater;
@@ -73,7 +71,7 @@ public class NotesAdapter extends BaseAdapter {
                 .setText(title);
         String date = "-";
         if (getItem(position).getDateTime() != 0) {
-          date = DATE_FORMAT.format(new Date(getItem(position).getDateTime()));
+          date = Formatter.date(getItem(position).getDateTime());
         }
         ((TextView) convertView.findViewById(R.id.textDate))
                       .setText(date);

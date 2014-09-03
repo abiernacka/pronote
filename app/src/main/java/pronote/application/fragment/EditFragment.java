@@ -35,6 +35,7 @@ import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -47,6 +48,7 @@ import java.util.Calendar;
 import pronote.application.R;
 import pronote.application.db.NotesDbAdapter;
 import pronote.application.model.Note;
+import pronote.application.utils.Formatter;
 
 /**
  * TODO Add class description...
@@ -62,10 +64,10 @@ public class EditFragment extends Fragment {
 
     private EditText editTextDate;
     private EditText editTextTime;
-    private Button buttonCall;
-    private Button buttonSMS;
-    private Button buttonRecord;
-    private Button buttonPlay;
+    private ImageButton buttonCall;
+    private ImageButton buttonSMS;
+    private ImageButton buttonRecord;
+    private ImageButton buttonPlay;
     private CheckBox checkboxPhoto, checkboxCall, checkboxSMS, checkboxRecord;
     private ImageView imagePhoto;
     private EditText editTextCall;
@@ -128,10 +130,10 @@ public class EditFragment extends Fragment {
         imagePhoto = (ImageView) view.findViewById(R.id.imagePhoto);
         editTextCall = (EditText) view.findViewById(R.id.editTextCall);
         editTextSMS = (EditText) view.findViewById(R.id.editTextSMS);
-        buttonCall = (Button) view.findViewById(R.id.buttonCall);
-        buttonSMS = (Button) view.findViewById(R.id.buttonSMS);
-        buttonRecord = (Button) view.findViewById(R.id.buttonRecord);
-        buttonPlay = (Button) view.findViewById(R.id.buttonPlay);
+        buttonCall = (ImageButton) view.findViewById(R.id.buttonCall);
+        buttonSMS = (ImageButton) view.findViewById(R.id.buttonSMS);
+        buttonRecord = (ImageButton) view.findViewById(R.id.buttonRecord);
+        buttonPlay = (ImageButton) view.findViewById(R.id.buttonPlay);
         chronometer = (Chronometer) view.findViewById(R.id.chronometer);
         title = (EditText) view.findViewById(R.id.title);
         body = (EditText) view.findViewById(R.id.body);
@@ -209,7 +211,7 @@ public class EditFragment extends Fragment {
           mediaPlayer.stop();
         } else {
           buttonRecord.setEnabled(false);
-          buttonPlay.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_stop));
+          buttonRecord.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_stop));
           chronometer.setBase(SystemClock.elapsedRealtime());
           chronometer.start();
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -217,7 +219,7 @@ public class EditFragment extends Fragment {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     try {
-                        buttonPlay.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_play));
+                        buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_play));
                         buttonRecord.setEnabled(true);
                         chronometer.stop();
                     } catch (IllegalStateException e) {
@@ -232,7 +234,7 @@ public class EditFragment extends Fragment {
                   mediaPlayer.start();
               } catch (Exception e) {
                     mediaPlayer.stop();
-                  buttonPlay.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_play));
+                  buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_play));
                   buttonRecord.setEnabled(true);
                   chronometer.stop();
               }
@@ -266,7 +268,7 @@ public class EditFragment extends Fragment {
   private void stopRecording() {
   	chronometer.stop();
     mediaRecorder.stop();
-    buttonRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_record));
+    buttonRecord.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_record));
     buttonPlay.setEnabled(true);
   }
   private void startRecording() {
@@ -275,7 +277,7 @@ public class EditFragment extends Fragment {
     mediaRecorder.start();
     chronometer.setBase(SystemClock.elapsedRealtime());
     chronometer.start();
-    buttonRecord.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_stop_record));
+    buttonRecord.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_stop));
     buttonPlay.setEnabled(false);
   }
 
@@ -323,12 +325,7 @@ public class EditFragment extends Fragment {
     };
 
   private void updateDateDisplay() {
-    editTextDate.setText(
-          new StringBuilder()
-                  // Month is 0 based so add 1
-                  .append(calendar.get(Calendar.MONTH) + 1).append("/")
-                  .append(calendar.get(Calendar.DAY_OF_MONTH)).append("/")
-                  .append(calendar.get(Calendar.YEAR)).append(" "));
+    editTextDate.setText(Formatter.date(calendar.getTimeInMillis()));
   }
 
   private void updateTimeDisplay() {

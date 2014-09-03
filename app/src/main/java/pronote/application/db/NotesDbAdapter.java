@@ -95,7 +95,7 @@ public class NotesDbAdapter {
     public Cursor fetchAllNotes() {
 
         return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_TITLE,
-                KEY_BODY,KEY_CALL_NUMBER,KEY_SMS_NUMBER,KEY_SMS_TEXT,KEY_RECORD_PATH,KEY_DATE_TIME,KEY_PHOTO}, null, null, null, null, KEY_DATE_TIME);
+                KEY_BODY,KEY_CALL_NUMBER,KEY_SMS_NUMBER,KEY_SMS_TEXT,KEY_RECORD_PATH,KEY_DATE_TIME,KEY_PHOTO}, null, null, null, null, KEY_DATE_TIME + " DESC");
     }
 
     public Cursor fetchNote(long rowId) throws SQLException {

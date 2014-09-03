@@ -20,6 +20,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.Inflater;
 
@@ -150,7 +151,9 @@ public class ListFragment extends Fragment {
         int id = item.getItemId();
         if (id == R.id.action_add) {
             EditFragment editFragment = new EditFragment();
-            editFragment.setNote(new Note());
+          Note newNote = new Note();
+          newNote.setDateTime(new Date().getTime());
+            editFragment.setNote(newNote);
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, editFragment)
                     .addToBackStack(null)

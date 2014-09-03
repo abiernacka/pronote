@@ -71,7 +71,7 @@
             android:text="@string/CallTo" />
 
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/viewCall"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -82,15 +82,19 @@
                 android:id="@+id/editTextCall"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2.21"
+                android:layout_toLeftOf="@+id/buttonCall"
+                android:layout_centerHorizontal="true"
                 android:inputType="phone" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/buttonCall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bt_contacts" />
-        </LinearLayout>
+                android:layout_alignParentRight="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_action_person"
+                android:background="@drawable/bt_bg_sel"/>
+        </RelativeLayout>
 
         <CheckBox
             android:id="@+id/checkboxSMS"
@@ -105,26 +109,27 @@
             android:orientation="vertical"
             android:visibility="gone" >
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/editTextSMS"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5.24"
+                    android:layout_toLeftOf="@+id/buttonSMS"
+                    android:layout_centerHorizontal="true"
                     android:inputType="phone" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/buttonSMS"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bt_contacts"
-                    android:onClick="buttonClick" />
-            </LinearLayout>
-
+                    android:layout_alignParentRight="true"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_action_person"
+                    android:background="@drawable/bt_bg_sel"/>
+            </RelativeLayout>
             <EditText
                 android:id="@+id/editTextSMSText"
                 android:layout_width="fill_parent"
@@ -158,17 +163,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center" >
 
-                <Button
+                <ImageButton
                     android:id="@+id/buttonRecord"
                     android:layout_width="78dp"
                     android:layout_height="78dp"
-                    android:background="@drawable/bt_record" />
+                    android:src="@drawable/ic_action_record"
+                    android:background="@drawable/bt_bg_sel"/>
 
-                <Button
+                <ImageButton
                     android:id="@+id/buttonPlay"
                     android:layout_width="78dp"
                     android:layout_height="78dp"
-                    android:background="@drawable/bt_play" />
+                    android:src="@drawable/ic_action_play"
+                    android:background="@drawable/bt_bg_sel" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
