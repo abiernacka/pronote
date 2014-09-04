@@ -80,7 +80,7 @@ public class ListFragment extends Fragment {
                                   }
 
                                   @Override
-                                  protected void onPostExecute(Void result) {
+                                  protected void onPreExecute() {
                                     List<Note> notes = adapter.getNotes();
                                     notes.remove(item);
                                     adapter.setNotes(notes);
@@ -98,11 +98,11 @@ public class ListFragment extends Fragment {
                                NotesDbAdapter dbHelper = new NotesDbAdapter(getActivity());
                                dbHelper.open();
                                dbHelper.createNote(item);
-                                 return null;
+                               return null;
                              }
 
                              @Override
-                             protected void onPostExecute(Void result) {
+                             protected void onPreExecute() {
                                List<Note> notes = adapter.getNotes();
                                notes.add(item);
                                adapter.setNotes(notes);

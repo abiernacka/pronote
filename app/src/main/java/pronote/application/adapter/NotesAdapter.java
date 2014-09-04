@@ -13,6 +13,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +42,12 @@ public class NotesAdapter extends BaseAdapter {
 
   public void setNotes(List<Note> notes) {
     this.notes = notes;
+    Collections.sort(this.notes, new Comparator<Note>() {
+      @Override
+      public int compare(Note lhs, Note rhs) {
+        return (int) (rhs.getDateTime() - lhs.getDateTime());
+      }
+    });
   }
 
   @Override

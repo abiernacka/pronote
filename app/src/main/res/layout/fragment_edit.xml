@@ -58,11 +58,12 @@
 
         <ImageView
             android:id="@+id/imagePhoto"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:scaleType="fitXY"
             android:layout_gravity="center"
-            android:src="@drawable/ic_picture" />
+            android:src="@drawable/ic_action_camera" />
 
         <CheckBox
             android:id="@+id/checkboxCall"
@@ -84,7 +85,8 @@
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/buttonCall"
                 android:layout_centerHorizontal="true"
-                android:inputType="phone" />
+                android:inputType="phone"
+                android:hint="@string/phone_number"/>
 
             <ImageButton
                 android:id="@+id/buttonCall"
@@ -119,7 +121,8 @@
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/buttonSMS"
                     android:layout_centerHorizontal="true"
-                    android:inputType="phone" />
+                    android:inputType="phone"
+                    android:hint="@string/phone_number"/>
 
                 <ImageButton
                     android:id="@+id/buttonSMS"
@@ -134,7 +137,8 @@
                 android:id="@+id/editTextSMSText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"
+                android:hint="@string/sms_content"/>
         </LinearLayout>
 
         <CheckBox
@@ -155,25 +159,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:text="Chronometer" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" >
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <ImageButton
                     android:id="@+id/buttonRecord"
-                    android:layout_width="78dp"
-                    android:layout_height="78dp"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
                     android:src="@drawable/ic_action_record"
                     android:background="@drawable/bt_bg_sel"/>
 
                 <ImageButton
                     android:id="@+id/buttonPlay"
-                    android:layout_width="78dp"
-                    android:layout_height="78dp"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
                     android:src="@drawable/ic_action_play"
                     android:background="@drawable/bt_bg_sel" />
             </LinearLayout>

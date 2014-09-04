@@ -14,12 +14,17 @@
         <TextView
             android:id="@+id/title"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="22sp"/>
 
         <TextView
             android:id="@+id/date"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/body"
@@ -27,20 +32,25 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:editable="true"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"
+            android:layout_marginTop="15dp"
+            android:textColor="@android:color/black"
+            android:textSize="17sp"/>
 
         <ImageView
             android:id="@+id/imagePhoto"
             android:visibility="gone"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:scaleType="center"
+            android:layout_marginTop="15dp"
             android:src="@drawable/ic_picture" />
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/viewCall"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:visibility="gone" >
 
             <TextView
@@ -48,22 +58,30 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="2.21"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
+                android:layout_centerVertical="true"
                 android:inputType="phone" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/buttonCall"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:background="@drawable/bt_bg_sel"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_action_call"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/viewSMS"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginTop="15dp"
             android:visibility="gone" >
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -73,41 +91,56 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="5.24"
+                    android:textColor="@android:color/black"
+                    android:textSize="17sp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
                     android:inputType="phone" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/buttonSMS"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_action_email"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/bt_bg_sel"/>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/editTextSMSText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
                 android:inputType="textMultiLine" />
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/viewRecord"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_marginTop="15dp"
             android:visibility="gone">
 
-            <Chronometer
-                android:id="@+id/chronometer"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="Chronometer" />
+            <TextView
+                android:id="@+id/editTextSMSText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:text="@string/play_recording"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/buttonPlay"
-                android:layout_width="78dp"
-                android:layout_height="78dp"
-                android:background="@drawable/bt_play" />
-        </LinearLayout>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_play"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/bt_bg_sel" />
+        </RelativeLayout>
     </LinearLayout>
 </ScrollView>

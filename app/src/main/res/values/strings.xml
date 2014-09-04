@@ -35,4 +35,12 @@
    	<string name="elv_undo_all">Undo All</string>
    	<string name="elv_item_deleted">Item deleted</string>
    	<string name="elv_n_items_deleted">%1$s items deleted</string>
+
+    <string name="phone_number">Phone number</string>
+    <string name="sms_content">SMS content</string>
+
+    <string name="call_to">Call to %s:</string>
+    <string name="send_sms_to">Send SMS to %s:</string>
+    <string name="sms_content_label">SMS content: %s</string>
+    <string name="play_recording">Play recording:</string>
 </resources>

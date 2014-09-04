@@ -76,6 +76,9 @@ public class NotesDbAdapter {
 
     public long createNote(Note note) {
         ContentValues initialValues = new ContentValues();
+        if (note.getRowId() != -1) {
+          initialValues.put(KEY_ROWID, note.getRowId());
+        }
         initialValues.put(KEY_TITLE, note.getTitle());
         initialValues.put(KEY_BODY, note.getBody());
         initialValues.put(KEY_CALL_NUMBER, note.getCallNumber());

@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,9 +43,9 @@ public class PreviewFragment extends Fragment {
     private static final String SERIALIZABLE_NOTE = "SERIALIZABLE_NOTE";
 
     private TextView editTextDate;
-    private Button buttonCall;
-    private Button buttonSMS;
-    private Button buttonPlay;
+    private ImageButton buttonCall;
+    private ImageButton buttonSMS;
+    private ImageButton buttonPlay;
     private ImageView imagePhoto;
     private TextView editTextCall;
     private TextView editTextSMS;
@@ -52,7 +53,6 @@ public class PreviewFragment extends Fragment {
     private TextView body;
     private TextView editTextSMSText;
     private MediaPlayer mediaPlayer = new MediaPlayer();
-    private Chronometer chronometer;
 
     private Note note;
 
@@ -88,10 +88,9 @@ public class PreviewFragment extends Fragment {
         imagePhoto = (ImageView) view.findViewById(R.id.imagePhoto);
         editTextCall = (TextView) view.findViewById(R.id.editTextCall);
         editTextSMS = (TextView) view.findViewById(R.id.editTextSMS);
-        buttonCall = (Button) view.findViewById(R.id.buttonCall);
-        buttonSMS = (Button) view.findViewById(R.id.buttonSMS);
-        buttonPlay = (Button) view.findViewById(R.id.buttonPlay);
-        chronometer = (Chronometer) view.findViewById(R.id.chronometer);
+        buttonCall = (ImageButton) view.findViewById(R.id.buttonCall);
+        buttonSMS = (ImageButton) view.findViewById(R.id.buttonSMS);
+        buttonPlay = (ImageButton) view.findViewById(R.id.buttonPlay);
         title = (TextView) view.findViewById(R.id.title);
         body = (TextView) view.findViewById(R.id.body);
         editTextSMSText = (TextView) view.findViewById(R.id.editTextSMSText);
@@ -107,9 +106,9 @@ public class PreviewFragment extends Fragment {
           title.setText(getString(R.string.untitled));
         }
         body.setText(note.getBody());
-        editTextCall.setText(note.getCallNumber());
-        editTextSMS.setText(note.getSmsNumber());
-        editTextSMSText.setText(note.getSmsText());
+        editTextCall.setText(String.format(getString(R.string.call_to), note.getCallNumber()));
+        editTextSMS.setText(String.format(getString(R.string.send_sms_to), note.getCallNumber()));
+        editTextSMSText.setText(String.format(getString(R.string.sms_content_label), note.getSmsText()));
         if (note.getDateTime() != 0) {
           editTextDate.setText(Formatter.date(note.getDateTime()));
         } else {
@@ -172,16 +171,13 @@ public class PreviewFragment extends Fragment {
         if(mediaPlayer.isPlaying()) {
           mediaPlayer.stop();
         } else {
-          buttonPlay.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_stop));
-          chronometer.setBase(SystemClock.elapsedRealtime());
-          chronometer.start();
+          buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.bt_stop));
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     try {
                         buttonPlay.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_play));
-                        chronometer.stop();
                     } catch (IllegalStateException e) {
                         //ignore
                     }
@@ -194,8 +190,7 @@ public class PreviewFragment extends Fragment {
                   mediaPlayer.start();
               } catch (Exception e) {
                     mediaPlayer.stop();
-                  buttonPlay.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_play));
-                  chronometer.stop();
+                  buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.bt_play));
               }
         }
     }
