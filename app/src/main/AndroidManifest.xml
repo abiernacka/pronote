@@ -25,6 +25,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name="pronote.application.notifications.OneShotAlarm" android:process=":remote" />
+        <receiver android:name="pronote.application.notifications.ClearNotificationReceiver" android:process=":remote" />
+        <receiver android:name="pronote.application.notifications.RebootSetAlarms" >
+            <intent-filter >
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

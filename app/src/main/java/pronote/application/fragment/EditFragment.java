@@ -6,8 +6,11 @@
 package pronote.application.fragment;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -48,6 +51,7 @@ import java.util.Calendar;
 import pronote.application.R;
 import pronote.application.db.NotesDbAdapter;
 import pronote.application.model.Note;
+import pronote.application.notifications.OneShotAlarm;
 import pronote.application.utils.Formatter;
 
 /**
@@ -91,6 +95,8 @@ public class EditFragment extends Fragment {
     @Override
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
+      calendar.set(Calendar.MILLISECOND, 0);
+      calendar.set(Calendar.SECOND, 0);
         setHasOptionsMenu(true);
     }
 
@@ -483,6 +489,7 @@ public class EditFragment extends Fragment {
                         dbHelper.updateNote(note2Save);
                     }
                     dbHelper.close();
+                    updateNotification();
                     return null;
                 }
 
@@ -501,8 +508,23 @@ public class EditFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+  private void updateNotification() {
+    Intent intent = new Intent(getActivity(), OneShotAlarm.class);
+    intent.putExtra(NotesDbAdapter.KEY_ROWID, note.getRowId());
+    PendingIntent sender = PendingIntent.getBroadcast(getActivity(), (int) note.getRowId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-    public Note getUpdatedNote() {
+    // We want the alarm to go off 30 seconds from now.
+    if(note.getDateTime()>=System.currentTimeMillis())
+    {
+        // Schedule the alarm!
+
+        AlarmManager am = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, note.getDateTime(), 0, sender);
+    }
+  }
+
+
+  public Note getUpdatedNote() {
         note.setTitle(title.getText().toString());
         note.setDateTime(calendar.getTimeInMillis());
         note.setBody(body.getText().toString());

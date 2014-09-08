@@ -43,4 +43,5 @@
     <string name="send_sms_to">Send SMS to %s:</string>
     <string name="sms_content_label">SMS content: %s</string>
     <string name="play_recording">Play recording:</string>
+    <string name="sd_card_error">External SD card not mounted</string>
 </resources>

@@ -41,13 +41,13 @@ public class NotesAdapter extends BaseAdapter {
   }
 
   public void setNotes(List<Note> notes) {
-    this.notes = notes;
-    Collections.sort(this.notes, new Comparator<Note>() {
+    Collections.sort(notes, new Comparator<Note>() {
       @Override
       public int compare(Note lhs, Note rhs) {
-        return (int) (rhs.getDateTime() - lhs.getDateTime());
+        return (int) (lhs.getDateTime() - rhs.getDateTime());
       }
     });
+    this.notes = notes;
   }
 
   @Override

@@ -5,11 +5,15 @@
  */
 package pronote.application.fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -24,7 +28,9 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -95,7 +101,7 @@ public class PreviewFragment extends Fragment {
         body = (TextView) view.findViewById(R.id.body);
         editTextSMSText = (TextView) view.findViewById(R.id.editTextSMSText);
 
-        setListeners(view);
+        setListeners();
 
         populateFields(view);
     }
@@ -105,7 +111,7 @@ public class PreviewFragment extends Fragment {
         if (TextUtils.isEmpty(note.getTitle())) {
           title.setText(getString(R.string.untitled));
         }
-        body.setText(note.getBody());
+        body.setText(note.getBody() + note.getDateTime());
         editTextCall.setText(String.format(getString(R.string.call_to), note.getCallNumber()));
         editTextSMS.setText(String.format(getString(R.string.send_sms_to), note.getCallNumber()));
         editTextSMSText.setText(String.format(getString(R.string.sms_content_label), note.getSmsText()));
@@ -143,7 +149,7 @@ public class PreviewFragment extends Fragment {
         }
     }
 
-    private void setListeners(View view) {
+    private void setListeners() {
         imagePhoto.setOnClickListener(onPhotoImageClickListener);
         buttonSMS.setOnClickListener(onSMSBtClickListener);
         buttonCall.setOnClickListener(onCallBtClickListener);
@@ -153,14 +159,15 @@ public class PreviewFragment extends Fragment {
   private View.OnClickListener onPhotoImageClickListener = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-     //TODO
+     showImage();
     }
   };
 
   private View.OnClickListener onCallBtClickListener = new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        //TODO
+        Intent dial = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+note.getCallNumber()));
+        startActivity(dial);
     }
   };
 
@@ -171,16 +178,12 @@ public class PreviewFragment extends Fragment {
         if(mediaPlayer.isPlaying()) {
           mediaPlayer.stop();
         } else {
-          buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.bt_stop));
+          buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_stop));
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    try {
-                        buttonPlay.setBackgroundDrawable(getResources().getDrawable(R.drawable.bt_play));
-                    } catch (IllegalStateException e) {
-                        //ignore
-                    }
+                  buttonPlay.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_action_play));
                 }
 
             });
@@ -189,8 +192,8 @@ public class PreviewFragment extends Fragment {
                   mediaPlayer.prepare();
                   mediaPlayer.start();
               } catch (Exception e) {
-                    mediaPlayer.stop();
-                  buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.bt_play));
+                  mediaPlayer.stop();
+                  buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_play));
               }
         }
     }
@@ -199,7 +202,9 @@ public class PreviewFragment extends Fragment {
   private View.OnClickListener onSMSBtClickListener = new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-      //todo
+        Intent sendSms = new Intent(Intent.ACTION_SENDTO, Uri.parse("sms:" + note.getSmsNumber()));
+        sendSms.putExtra("sms_body", note.getSmsText());
+        startActivity(sendSms);
     }
   };
 
@@ -256,4 +261,26 @@ public class PreviewFragment extends Fragment {
         super.onSaveInstanceState(icicle);
         icicle.putSerializable(SERIALIZABLE_NOTE, note);
     }
+
+  public void showImage() {
+  		if(!checkSdCard()) {
+  			Toast.makeText(getActivity(), getString(R.string.sd_card_error), Toast.LENGTH_LONG).show();
+  			return;
+  		}
+  		if (note.getPhoto() != null && new File(note.getPhoto()).exists()) {
+  			Intent intent = new Intent();
+  			intent.setAction(android.content.Intent.ACTION_VIEW);
+  			intent.setDataAndType(Uri.fromFile(new File(note.getPhoto())), "image/jpg");
+        getActivity().startActivity(intent);
+  		}
+  	}
+  	/**
+  	 * @brief Sprawdza czy karta SD jest dostepna
+  	 *
+  	 * @return Zwraca prawdę jeśli karta SD jest dostepna, a false w wypadku przeciwnym
+  	 */
+  	public static boolean checkSdCard()
+  	{
+  		return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+  	}
 }
