@@ -59,10 +59,12 @@
         <ImageView
             android:id="@+id/imagePhoto"
             android:visibility="visible"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:adjustViewBounds="true"
             android:src="@drawable/ic_action_camera" />
 
         <CheckBox
