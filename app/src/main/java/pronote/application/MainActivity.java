@@ -5,8 +5,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -69,7 +71,20 @@ public class MainActivity extends ActionBarActivity {
                 .commit();
       }
 
-      AdView mAdView = (AdView) findViewById(R.id.ad);
+      final AdView mAdView = (AdView) findViewById(R.id.ad);
+      mAdView.setAdListener(new AdListener() {
+        @Override
+        public void onAdLoaded() {
+          super.onAdLoaded();
+          mAdView.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onAdFailedToLoad(int errorCode) {
+          super.onAdFailedToLoad(errorCode);
+          mAdView.setVisibility(View.GONE);
+        }
+      });
 
       AdRequest adRequest = new AdRequest.Builder().build();
       mAdView.loadAd(adRequest);
