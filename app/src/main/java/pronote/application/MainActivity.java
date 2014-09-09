@@ -7,6 +7,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import pronote.application.db.NotesDbAdapter;
 import pronote.application.fragment.EditFragment;
 import pronote.application.fragment.ListFragment;
@@ -65,5 +68,10 @@ public class MainActivity extends ActionBarActivity {
                 .addToBackStack(null)
                 .commit();
       }
+
+      AdView mAdView = (AdView) findViewById(R.id.ad);
+
+      AdRequest adRequest = new AdRequest.Builder().build();
+      mAdView.loadAd(adRequest);
     }
 }
