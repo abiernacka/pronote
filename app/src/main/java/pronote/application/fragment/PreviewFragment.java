@@ -59,7 +59,7 @@ public class PreviewFragment extends Fragment {
     private TextView title;
     private TextView body;
     private TextView editTextSMSText;
-    private MediaPlayer mediaPlayer = new MediaPlayer();
+    private MediaPlayer mediaPlayer = null;
 
     private Note note;
 
@@ -74,7 +74,9 @@ public class PreviewFragment extends Fragment {
 
     @Override
     public void onPause() {
-        mediaPlayer.stop();
+        if (mediaPlayer != null) {
+          mediaPlayer.stop();
+        }
         super.onPause();
     }
 
@@ -176,15 +178,17 @@ public class PreviewFragment extends Fragment {
       @Override
       public void onClick(View v) {
 
-        if(mediaPlayer.isPlaying()) {
+        if(mediaPlayer != null && mediaPlayer.isPlaying()) {
           mediaPlayer.stop();
+          buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_play));
         } else {
+          mediaPlayer = new MediaPlayer();
           buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_stop));
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                  buttonPlay.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_action_play));
+                  buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_play));
                 }
 
             });

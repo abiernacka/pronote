@@ -26,6 +26,7 @@ import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,6 +46,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Calendar;
 
@@ -84,8 +86,8 @@ public class EditFragment extends Fragment {
     private Calendar calendar = Calendar.getInstance();
 
     private boolean isRecording = false;
-    private MediaRecorder mediaRecorder = new MediaRecorder();
-    private MediaPlayer mediaPlayer = new MediaPlayer();
+    private MediaRecorder mediaRecorder;
+    private MediaPlayer mediaPlayer;
     private Chronometer chronometer;
 
     private Note note;
@@ -101,11 +103,10 @@ public class EditFragment extends Fragment {
 
     @Override
     public void onPause() {
-        mediaPlayer.stop();
-        if (mediaRecorder != null && isRecording) {
-            mediaRecorder.stop();
-            isRecording = false;
+        if (mediaPlayer != null) {
+          mediaPlayer.stop();
         }
+        releaseMediaRecorder();
         super.onPause();
     }
 
@@ -212,11 +213,15 @@ public class EditFragment extends Fragment {
           return;
         }
 
-        if(mediaPlayer.isPlaying()) {
+        if(mediaPlayer != null && mediaPlayer.isPlaying()) {
           mediaPlayer.stop();
+          buttonRecord.setEnabled(true);
+          buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_play));
+          chronometer.stop();
         } else {
+          mediaPlayer = new MediaPlayer();
           buttonRecord.setEnabled(false);
-          buttonRecord.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_stop));
+          buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_stop));
           chronometer.setBase(SystemClock.elapsedRealtime());
           chronometer.start();
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -258,45 +263,30 @@ public class EditFragment extends Fragment {
   private View.OnClickListener onRecordBtClickListener = new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-      if(mediaPlayer.isPlaying()) {
+      if(mediaPlayer != null && mediaPlayer.isPlaying()) {
         return;
       }
       if(isRecording) {
-        stopRecording();
+        mediaRecorder.stop();  // stop the recording
+        releaseMediaRecorder(); // release the MediaRecorder object
       } else {
-        startRecording();
+        new MediaPrepareTask().execute(null, null, null);
       }
       isRecording = !isRecording;
     }
   };
 
-  private void stopRecording() {
-  	chronometer.stop();
-    mediaRecorder.stop();
-    buttonRecord.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_record));
-    buttonPlay.setEnabled(true);
-  }
-  private void startRecording() {
-  	mediaRecorder = new MediaRecorder();
-    prepare();
-    mediaRecorder.start();
-    chronometer.setBase(SystemClock.elapsedRealtime());
-    chronometer.start();
-    buttonRecord.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_stop));
-    buttonPlay.setEnabled(false);
-  }
-
-  private void prepare() {
-  	try {
-      mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-      mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
-      mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-      note.setRecordPath(getNewPath());
-      mediaRecorder.setOutputFile(note.getRecordPath());
-      mediaRecorder.prepare();
-    } catch (Exception e) {
-      //ignore tmp
-    }
+  private void releaseMediaRecorder(){
+      if (mediaRecorder != null) {
+        // clear recorder configuration
+        mediaRecorder.reset();
+        // release the recorder object
+        mediaRecorder.release();
+        mediaRecorder = null;
+        chronometer.stop();
+        buttonRecord.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_record));
+        buttonPlay.setEnabled(true);
+      }
   }
 
   private CompoundButton.OnCheckedChangeListener getOnCheckedChangeListener(final View viewToShow) {
@@ -560,4 +550,52 @@ public class EditFragment extends Fragment {
         super.onSaveInstanceState(icicle);
         icicle.putSerializable(SERIALIZABLE_NOTE, note);
     }
+  private boolean prepareVideoRecorder(){
+
+    mediaRecorder = new MediaRecorder();
+
+    mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+    mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
+    mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+    note.setRecordPath(getNewPath());
+    mediaRecorder.setOutputFile(note.getRecordPath());
+    try {
+        mediaRecorder.prepare();
+    } catch (IllegalStateException e) {
+        releaseMediaRecorder();
+        return false;
+    } catch (IOException e) {
+        releaseMediaRecorder();
+        return false;
+    }
+    return true;
+  }
+  class MediaPrepareTask extends AsyncTask<Void, Void, Boolean> {
+
+          @Override
+          protected Boolean doInBackground(Void... voids) {
+              // initialize video camera
+              if (prepareVideoRecorder()) {
+                  // Camera is available and unlocked, MediaRecorder is prepared,
+                  // now you can start recording
+                  mediaRecorder.start();
+                  isRecording = true;
+              } else {
+                  // prepare didn't work, release the camera
+                  releaseMediaRecorder();
+                  return false;
+              }
+              return true;
+          }
+          @Override
+          protected void onPostExecute(Boolean result) {
+              if (result) {
+                chronometer.setBase(SystemClock.elapsedRealtime());
+                chronometer.start();
+                buttonRecord.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_stop));
+                buttonPlay.setEnabled(false);
+              }
+          }
+
+      }
 }
