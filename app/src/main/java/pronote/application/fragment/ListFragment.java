@@ -5,6 +5,7 @@
  */
 package pronote.application.fragment;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import pronote.application.adapter.NotesAdapter;
 import pronote.application.db.NotesDbAdapter;
 import pronote.application.model.Note;
 import pronote.application.view.EnhancedListView;
+import pronote.application.widget.ProNoteWidgetProvider;
 
 /**
  * TODO Add class description...
@@ -76,6 +78,9 @@ public class ListFragment extends Fragment {
                                       NotesDbAdapter dbHelper = new NotesDbAdapter(getActivity());
                                       dbHelper.open();
                                       dbHelper.deleteNote(item.getRowId());
+
+                                      Intent widgetUpdateIntent = new Intent(ProNoteWidgetProvider.UPDATE_WIDGETS);
+                                      getActivity().sendBroadcast(widgetUpdateIntent);
                                       return null;
                                   }
 
@@ -98,6 +103,9 @@ public class ListFragment extends Fragment {
                                NotesDbAdapter dbHelper = new NotesDbAdapter(getActivity());
                                dbHelper.open();
                                dbHelper.createNote(item);
+
+                               Intent widgetUpdateIntent = new Intent(ProNoteWidgetProvider.UPDATE_WIDGETS);
+                               getActivity().sendBroadcast(widgetUpdateIntent);
                                return null;
                              }
 

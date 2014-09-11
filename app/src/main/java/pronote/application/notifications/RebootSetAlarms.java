@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.database.Cursor;
 
 import pronote.application.db.NotesDbAdapter;
+import pronote.application.widget.ProNoteWidgetProvider;
 
 /**
  * @brief Klasa odpowiedzialna za ponowne ustawienie wszystkich powiadomień po restarcie systemu.<br>
@@ -31,7 +32,6 @@ public class RebootSetAlarms extends BroadcastReceiver {
 	 * @param intent Intencja
 	 */
 	public void onReceive(Context context, Intent intent) {
-		// TODO Auto-generated method stub
 
 		mDbHelper = new NotesDbAdapter(context);
         mDbHelper.open();
@@ -56,6 +56,7 @@ public class RebootSetAlarms extends BroadcastReceiver {
                 am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
             }
         } while(mNotesCursor.moveToNext());
-       // new ProNoteUpdater(context).run();
+        Intent widgetUpdateIntent = new Intent(ProNoteWidgetProvider.UPDATE_WIDGETS);
+        context.sendBroadcast(widgetUpdateIntent);
 	}
 }

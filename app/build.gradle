@@ -11,10 +11,22 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs {
+        release {
+            storeFile file('so_creat.keystore')
+            storePassword 'afkilk123'
+            keyAlias 'so_creat_key'
+            keyPassword 'afkilk123'
+        }
+    }
     buildTypes {
         release {
-            runProguard false
+            runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+            jniDebugBuild false
+            signingConfig signingConfigs.release
+            zipAlign true
         }
     }
 }

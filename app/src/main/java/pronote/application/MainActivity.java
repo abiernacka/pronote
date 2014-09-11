@@ -1,5 +1,7 @@
 package pronote.application;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import com.google.android.gms.ads.AdView;
 import pronote.application.db.NotesDbAdapter;
 import pronote.application.fragment.EditFragment;
 import pronote.application.fragment.ListFragment;
+import pronote.application.fragment.PreviewFragment;
 import pronote.application.model.Note;
 
 
@@ -40,6 +43,10 @@ public class MainActivity extends ActionBarActivity {
               }
 
       if (mRowId != null) {
+
+        NotificationManager nm=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.cancel(mRowId.intValue());
+
         NotesDbAdapter mDbHelper = new NotesDbAdapter(this);
         mDbHelper.open();
         Cursor mNotesCursor = mDbHelper.fetchNote(mRowId);
@@ -63,10 +70,10 @@ public class MainActivity extends ActionBarActivity {
         note.setRecordPath(recordPath);
         note.setDateTime(dateTime);
         note.setPhoto(photo);
-        EditFragment editFragment = new EditFragment();
-        editFragment.setNote(note);
+        PreviewFragment p = new PreviewFragment();
+        p.setNote(note);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, editFragment)
+                .replace(R.id.container, p)
                 .addToBackStack(null)
                 .commit();
       }

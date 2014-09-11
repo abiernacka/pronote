@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -33,6 +34,7 @@ import java.util.Date;
 import pronote.application.MainActivity;
 import pronote.application.R;
 import pronote.application.db.NotesDbAdapter;
+import pronote.application.widget.ProNoteWidgetProvider;
 
 // Need the following import to get access to the app resources, since this
 // class is in a sub-package.
@@ -56,24 +58,18 @@ public class OneShotAlarm extends BroadcastReceiver
     	//Update Widgetow
 //      Intent widgetUpdateIntent = new Intent(ProNoteWidgetProvider.UPDATE_WIDGETS);
 //      context.sendBroadcast(widgetUpdateIntent);
-    	
+
+      Intent widgetUpdateIntent = new Intent(ProNoteWidgetProvider.UPDATE_WIDGETS);
+      context.sendBroadcast(widgetUpdateIntent);
     	String mTitleText="";
     	mDbHelper = new NotesDbAdapter(context);
         mDbHelper.open();
-        Bundle extras = intent.getExtras();
-        Long mRowId = extras != null ? extras.getLong(NotesDbAdapter.KEY_ROWID)
-                                : null;
-
-      Long date = 0L;
+        Long mRowId = intent.getLongExtra(NotesDbAdapter.KEY_ROWID, -1);
         if (mRowId != null && mRowId != 0L) {
+          Log.d("AGA", "rowid="+mRowId);
             Cursor note = mDbHelper.fetchNote(mRowId);
-          note.moveToFirst();
-            
-            //startManagingCursor(note);
             mTitleText=note.getString(
                         note.getColumnIndexOrThrow(NotesDbAdapter.KEY_TITLE));
-
-          date = note.getLong(note.getColumnIndexOrThrow(NotesDbAdapter.KEY_DATE_TIME));
         }
     	///////////////
         
@@ -100,20 +96,6 @@ public class OneShotAlarm extends BroadcastReceiver
         notif.setLatestEventInfo(context, mTitleText, "ProNote", appIntent);
         nm.notify(mRowId.intValue(), notif);
         Toast.makeText(context, mTitleText, Toast.LENGTH_SHORT).show();
-        
-
-        PendingIntent sender = PendingIntent.getBroadcast(context, mRowId.intValue(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        
-        // We want the alarm to go off 30 seconds from now.
-        Calendar calendar = Calendar.getInstance();
-      calendar.setTime(new Date(date));
-        if(calendar.getTimeInMillis()>=System.currentTimeMillis())
-        {
-            // Schedule the alarm!
-        	
-            AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-            am.set(AlarmManager.RTC_WAKEUP, date, sender);
-        }
     }
 }
 

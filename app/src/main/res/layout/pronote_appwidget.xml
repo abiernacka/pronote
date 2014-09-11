@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widgetLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="80dp"
+    android:padding="5dp" >
+
+  <LinearLayout
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:background="@drawable/wigetbackground"
+      android:orientation="horizontal" >
+
+
+      <ImageView
+          android:id="@+id/imageView1"
+          android:layout_width="51dp"
+          android:layout_height="fill_parent"
+          android:src="@drawable/ic_launcher" />
+
+      <LinearLayout
+          android:id="@+id/linearLayout1"
+          android:layout_width="wrap_content"
+          android:layout_height="fill_parent"
+          android:orientation="vertical" >
+
+
+          <TextView
+              android:id="@+id/textView1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_margin="5dp"
+              android:text="@string/ProNoteUpcomingEvent"
+              android:textAppearance="?android:attr/textAppearanceLarge"
+              android:textSize="15sp" />
+
+
+          <TextView
+              android:id="@+id/UpcomingEventText"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="5dp"
+              android:layout_marginTop="2dp"
+              android:text="No upcoming events"
+              android:textAppearance="?android:attr/textAppearanceSmall" />
+
+      </LinearLayout>
+
+  </LinearLayout>
+
+</FrameLayout>
+
+
+

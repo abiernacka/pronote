@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ProNote</string>
+    <string name="action_settings">Dodaj</string>
+    <string name="action_confirm">Potwierdź</string>
+    <string name="menu_delete">Usuń</string>
+    <string name="title">Tytuł notatki</string>
+    <string name="body">Treść notatki</string>
+    <string name="edit_note">Edytuj</string>
+    <string name="CallTo">Zadzwoń...</string>
+    <string name="MakePhoto">Zrób zdjęcie...</string>
+    <string name="SendSMS">Wyślij SMS...</string>
+    <string name="RecordNote">Nagraj notatkę głosową...</string>
+    <string name="DateStr">Data</string>
+    <string name="TimeStr">Czas</string>
+    <string name="empty">&quot;    &quot;</string>
+    <string name="Bt_Phone_Str">ZAdzwoń</string>
+    <string name="SendSmsStr">Wyślij SMS</string>
+    <string name="menu_edit">Edytuj notatkę</string>
+    <string name="NewPhoto">Nowe zdjęcie</string>
+    <string name="ProNoteUpcomingEvent">Nadchodzące wydarzenia:</string>
+    <string name="untitled">Bez tytułu</string>
+
+    <string name="elv_undo">Cofnij</string>
+   	<string name="elv_undo_all">Cofnij wszystko</string>
+   	<string name="elv_item_deleted">Usunięto</string>
+   	<string name="elv_n_items_deleted">%1$s element usunięty</string>
+
+    <string name="phone_number">Numer telefonu</string>
+    <string name="sms_content">Treść wiadomości SMS</string>
+
+    <string name="call_to">Zadzwoń do %s:</string>
+    <string name="send_sms_to">Wyślij wiadomość SMS do %s:</string>
+    <string name="sms_content_label">Treść wiadomości SMS: %s</string>
+    <string name="play_recording">Odtwórz nagranie:</string>
+    <string name="sd_card_error">Karta SD jest niedostępna</string>
+
+    <string name="no_events">Brak nadchodzących wydarzeń</string>
+
+    <string name="admob_id">ca-app-pub-8548442050798795/7332920663</string>
+</resources>

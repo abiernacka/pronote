@@ -53,6 +53,7 @@ import pronote.application.db.NotesDbAdapter;
 import pronote.application.model.Note;
 import pronote.application.notifications.OneShotAlarm;
 import pronote.application.utils.Formatter;
+import pronote.application.widget.ProNoteWidgetProvider;
 
 /**
  * TODO Add class description...
@@ -95,8 +96,6 @@ public class EditFragment extends Fragment {
     @Override
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
-      calendar.set(Calendar.MILLISECOND, 0);
-      calendar.set(Calendar.SECOND, 0);
         setHasOptionsMenu(true);
     }
 
@@ -483,13 +482,17 @@ public class EditFragment extends Fragment {
                     NotesDbAdapter dbHelper = new NotesDbAdapter(getActivity());
                     dbHelper.open();
                     Note note2Save = params[0];
+                    long noteId = note2Save.getRowId();
                     if (note2Save.getRowId() == -1) {
-                        dbHelper.createNote(note2Save);
+                        noteId = dbHelper.createNote(note2Save);
                     } else {
                         dbHelper.updateNote(note2Save);
                     }
                     dbHelper.close();
-                    updateNotification();
+                    updateNotification(noteId);
+
+                  Intent widgetUpdateIntent = new Intent(ProNoteWidgetProvider.UPDATE_WIDGETS);
+                  getActivity().sendBroadcast(widgetUpdateIntent);
                     return null;
                 }
 
@@ -508,24 +511,26 @@ public class EditFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-  private void updateNotification() {
+  private void updateNotification(long noteId) {
     Intent intent = new Intent(getActivity(), OneShotAlarm.class);
-    intent.putExtra(NotesDbAdapter.KEY_ROWID, note.getRowId());
-    PendingIntent sender = PendingIntent.getBroadcast(getActivity(), (int) note.getRowId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    intent.putExtra(NotesDbAdapter.KEY_ROWID, noteId);
+    PendingIntent sender = PendingIntent.getBroadcast(getActivity(), (int) noteId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     // We want the alarm to go off 30 seconds from now.
-    if(note.getDateTime()>=System.currentTimeMillis())
-    {
+    if(this.note.getDateTime() >= System.currentTimeMillis()) {
         // Schedule the alarm!
 
         AlarmManager am = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, note.getDateTime(), 0, sender);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, this.note.getDateTime(), 0, sender);
     }
   }
 
 
   public Note getUpdatedNote() {
         note.setTitle(title.getText().toString());
+
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
         note.setDateTime(calendar.getTimeInMillis());
         note.setBody(body.getText().toString());
         if (!checkboxPhoto.isChecked()) {

@@ -38,6 +38,7 @@ import pronote.application.R;
 import pronote.application.db.NotesDbAdapter;
 import pronote.application.model.Note;
 import pronote.application.utils.Formatter;
+import pronote.application.widget.ProNoteWidgetProvider;
 
 /**
  * TODO Add class description...
@@ -242,6 +243,8 @@ public class PreviewFragment extends Fragment {
                     NotesDbAdapter dbHelper = new NotesDbAdapter(getActivity());
                     dbHelper.open();
                     dbHelper.deleteNote(note.getRowId());
+                    Intent widgetUpdateIntent = new Intent(ProNoteWidgetProvider.UPDATE_WIDGETS);
+                    getActivity().sendBroadcast(widgetUpdateIntent);
                     return null;
                 }
 
