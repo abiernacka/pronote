@@ -11,6 +11,8 @@ import android.view.Window;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import pronote.application.db.NotesDbAdapter;
 import pronote.application.fragment.ListFragment;
@@ -74,23 +76,40 @@ public class MainActivity extends ActionBarActivity {
                     .addToBackStack(null)
                     .commit();
         }
+        checkGooglePlayServices();
 
-        final AdView mAdView = (AdView) findViewById(R.id.ad);
-        mAdView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                mAdView.setVisibility(View.VISIBLE);
+    }
+    public void checkGooglePlayServices(){
+        // Check status of Google Play Services
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        // Check Google Play Service Available
+        try{
+            if (status != ConnectionResult.SUCCESS) {
+                GooglePlayServicesUtil.getErrorDialog(status, this, 10).show();
+            } else {
+
+
+                final AdView mAdView = (AdView) findViewById(R.id.ad);
+                mAdView.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdLoaded() {
+                        super.onAdLoaded();
+                        mAdView.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(int errorCode) {
+                        super.onAdFailedToLoad(errorCode);
+                        mAdView.setVisibility(View.GONE);
+                    }
+                });
+
+                AdRequest adRequest = new AdRequest.Builder().build();
+                mAdView.loadAd(adRequest);
             }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                super.onAdFailedToLoad(errorCode);
-                mAdView.setVisibility(View.GONE);
-            }
-        });
-
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        }
+        catch (Exception e) {
+            //
+        }
     }
 }

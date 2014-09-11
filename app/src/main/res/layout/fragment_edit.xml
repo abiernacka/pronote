@@ -65,7 +65,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/ic_action_camera" />
+            android:src="@drawable/ic_picture" />
 
         <CheckBox
             android:id="@+id/checkboxCall"
