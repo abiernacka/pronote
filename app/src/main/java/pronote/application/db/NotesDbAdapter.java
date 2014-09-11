@@ -77,7 +77,7 @@ public class NotesDbAdapter {
     public long createNote(Note note) {
         ContentValues initialValues = new ContentValues();
         if (note.getRowId() != -1) {
-          initialValues.put(KEY_ROWID, note.getRowId());
+            initialValues.put(KEY_ROWID, note.getRowId());
         }
         initialValues.put(KEY_TITLE, note.getTitle());
         initialValues.put(KEY_BODY, note.getBody());
@@ -97,16 +97,16 @@ public class NotesDbAdapter {
 
     public Cursor fetchAllNotes() {
 
-        return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_TITLE,
-                KEY_BODY,KEY_CALL_NUMBER,KEY_SMS_NUMBER,KEY_SMS_TEXT,KEY_RECORD_PATH,KEY_DATE_TIME,KEY_PHOTO}, null, null, null, null, KEY_DATE_TIME + " DESC");
+        return mDb.query(DATABASE_TABLE, new String[]{KEY_ROWID, KEY_TITLE,
+                KEY_BODY, KEY_CALL_NUMBER, KEY_SMS_NUMBER, KEY_SMS_TEXT, KEY_RECORD_PATH, KEY_DATE_TIME, KEY_PHOTO}, null, null, null, null, KEY_DATE_TIME + " DESC");
     }
 
     public Cursor fetchNote(long rowId) throws SQLException {
 
         Cursor mCursor =
 
-                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID,
-                                KEY_TITLE, KEY_BODY, KEY_CALL_NUMBER,KEY_SMS_NUMBER,KEY_SMS_TEXT,KEY_RECORD_PATH,KEY_DATE_TIME,KEY_PHOTO}, KEY_ROWID + "=" + rowId, null,
+                mDb.query(true, DATABASE_TABLE, new String[]{KEY_ROWID,
+                                KEY_TITLE, KEY_BODY, KEY_CALL_NUMBER, KEY_SMS_NUMBER, KEY_SMS_TEXT, KEY_RECORD_PATH, KEY_DATE_TIME, KEY_PHOTO}, KEY_ROWID + "=" + rowId, null,
                         null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();

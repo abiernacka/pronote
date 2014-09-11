@@ -26,14 +26,12 @@ import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
@@ -104,7 +102,7 @@ public class EditFragment extends Fragment {
     @Override
     public void onPause() {
         if (mediaPlayer != null) {
-          mediaPlayer.stop();
+            mediaPlayer.stop();
         }
         releaseMediaRecorder();
         super.onPause();
@@ -112,7 +110,7 @@ public class EditFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             note = (Note) savedInstanceState.getSerializable(SERIALIZABLE_NOTE);
         }
@@ -190,264 +188,258 @@ public class EditFragment extends Fragment {
         buttonPlay.setOnClickListener(onPlayBtClickListener);
     }
 
-  private View.OnClickListener onPhotoImageClickListener = new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-      Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-      startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
-    }
-  };
-
-  private View.OnClickListener onCallBtClickListener = new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Intent chooser = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        startActivityForResult(chooser, CONTACT_SELECTED_CALL);
-    }
-  };
-
-  private View.OnClickListener onPlayBtClickListener = new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        if(isRecording) {
-          return;
+    private View.OnClickListener onPhotoImageClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
         }
+    };
 
-        if(mediaPlayer != null && mediaPlayer.isPlaying()) {
-          mediaPlayer.stop();
-          buttonRecord.setEnabled(true);
-          buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_play));
-          chronometer.stop();
-        } else {
-          mediaPlayer = new MediaPlayer();
-          buttonRecord.setEnabled(false);
-          buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_stop));
-          chronometer.setBase(SystemClock.elapsedRealtime());
-          chronometer.start();
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+    private View.OnClickListener onCallBtClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent chooser = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+            startActivityForResult(chooser, CONTACT_SELECTED_CALL);
+        }
+    };
 
-                @Override
-                public void onCompletion(MediaPlayer mp) {
+    private View.OnClickListener onPlayBtClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (isRecording) {
+                return;
+            }
+
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+                buttonRecord.setEnabled(true);
+                buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_play));
+                chronometer.stop();
+            } else {
+                mediaPlayer = new MediaPlayer();
+                buttonRecord.setEnabled(false);
+                buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_stop));
+                chronometer.setBase(SystemClock.elapsedRealtime());
+                chronometer.start();
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        try {
+                            buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_play));
+                            buttonRecord.setEnabled(true);
+                            chronometer.stop();
+                        } catch (IllegalStateException e) {
+                            //ignore
+                        }
+                    }
+
+                });
+                try {
+                    mediaPlayer.setDataSource(note.getRecordPath());
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();
+                } catch (Exception e) {
+                    mediaPlayer.stop();
+                    buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_play));
+                    buttonRecord.setEnabled(true);
+                    chronometer.stop();
+                }
+            }
+        }
+    };
+
+    private View.OnClickListener onSMSBtClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent chooser = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+            startActivityForResult(chooser, CONTACT_SELECTED_SMS);
+        }
+    };
+
+    private View.OnClickListener onRecordBtClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                return;
+            }
+            if (isRecording) {
+                mediaRecorder.stop();  // stop the recording
+                releaseMediaRecorder(); // release the MediaRecorder object
+            } else {
+                new MediaPrepareTask().execute(null, null, null);
+            }
+            isRecording = !isRecording;
+        }
+    };
+
+    private void releaseMediaRecorder() {
+        if (mediaRecorder != null) {
+            // clear recorder configuration
+            mediaRecorder.reset();
+            // release the recorder object
+            mediaRecorder.release();
+            mediaRecorder = null;
+            chronometer.stop();
+            buttonRecord.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_record));
+            buttonPlay.setEnabled(true);
+        }
+    }
+
+    private CompoundButton.OnCheckedChangeListener getOnCheckedChangeListener(final View viewToShow) {
+        return new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+                    viewToShow.setVisibility(View.VISIBLE);
+                } else {
+                    viewToShow.setVisibility(View.GONE);
+                }
+            }
+        };
+    }
+
+    private View.OnClickListener onButtonDateClickListner = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            new DatePickerDialog(getActivity(), pDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)).show();
+        }
+    };
+
+    private View.OnClickListener onButtonTimeClickListner = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            new TimePickerDialog(getActivity(), pTimeSetListener, calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE), true).show();
+        }
+    };
+
+    private void updateDateDisplay() {
+        editTextDate.setText(Formatter.date(calendar.getTimeInMillis()));
+    }
+
+    private void updateTimeDisplay() {
+        String hourOfDayText = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+        if (hourOfDayText.length() == 1) {
+            hourOfDayText = "0" + hourOfDayText;
+        }
+        String minuteText = String.valueOf(calendar.get(Calendar.MINUTE));
+        if (minuteText.length() == 1) {
+            minuteText = "0" + minuteText;
+        }
+        editTextTime.setText(String.format("%s:%s", hourOfDayText, minuteText));
+    }
+
+    private DatePickerDialog.OnDateSetListener pDateSetListener = new DatePickerDialog.OnDateSetListener() {
+
+        public void onDateSet(DatePicker view, int year,
+                              int monthOfYear, int dayOfMonth) {
+            calendar.set(year, monthOfYear, dayOfMonth);
+            updateDateDisplay();
+        }
+    };
+
+    private TimePickerDialog.OnTimeSetListener pTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calendar.set(Calendar.MINUTE, minute);
+            updateTimeDisplay();
+        }
+    };
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case CONTACT_SELECTED_CALL:
+            case CONTACT_SELECTED_SMS:
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri contactData = data.getData();
+                    Cursor c = getActivity().managedQuery(contactData, null, null, null, null);
+                    if (c.moveToFirst()) {
+                        int contactID = c.getInt(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+                        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+                        String[] projection = new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER};
+                        String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?";
+                        String[] selectionArgs = new String[]{"" + contactID};
+                        Cursor context = getActivity().managedQuery(uri, projection, selection, selectionArgs, null);
+                        if (context.moveToFirst()) {
+                            if (requestCode == CONTACT_SELECTED_CALL) {
+                                editTextCall.setText(context.getString(0));
+                            } else if (requestCode == CONTACT_SELECTED_SMS) {
+                                editTextSMS.setText(context.getString(0));
+                            }
+                        }
+                    }
+                }
+                break;
+            case CAMERA_PIC_REQUEST:
+                if (resultCode == Activity.RESULT_OK) {
+                    Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+                    OutputStream writer = null;
+
+                    if (note.getPhoto() != null) {
+                        File oldFile = new File(note.getPhoto());
+                        if (oldFile.exists()) {
+                            oldFile.delete();
+                        }
+                    }
+
+                    note.setPhoto(getNewPhotoPath());
+                    File file = new File(note.getPhoto());
                     try {
-                        buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_play));
-                        buttonRecord.setEnabled(true);
-                        chronometer.stop();
-                    } catch (IllegalStateException e) {
-                        //ignore
+                        writer = new FileOutputStream(file);
+                        if (!thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, writer)) {
+                            break;
+                        }
+
+                        writer.flush();
+                        writer.close();
+
+                        imagePhoto.setImageBitmap(thumbnail);
+                    } catch (Exception e) {
+
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        break;
                     }
                 }
 
-            });
-              try {
-                  mediaPlayer.setDataSource(note.getRecordPath());
-                  mediaPlayer.prepare();
-                  mediaPlayer.start();
-              } catch (Exception e) {
-                    mediaPlayer.stop();
-                  buttonPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_play));
-                  buttonRecord.setEnabled(true);
-                  chronometer.stop();
-              }
+                break;
         }
     }
-  };
 
-  private View.OnClickListener onSMSBtClickListener = new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-      Intent chooser = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-      startActivityForResult(chooser, CONTACT_SELECTED_SMS);
+    public static String getNewPhotoPath() {
+        String path;
+        path = Environment.getExternalStorageDirectory().getAbsolutePath();
+        path += "/ProNote/NotePhotos/";
+        File fPath = new File(path);
+        fPath.mkdirs();
+        path += String.valueOf(Calendar.getInstance().getTimeInMillis());
+        path += ".jpg";
+
+        return path;
     }
-  };
-
-  private View.OnClickListener onRecordBtClickListener = new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-      if(mediaPlayer != null && mediaPlayer.isPlaying()) {
-        return;
-      }
-      if(isRecording) {
-        mediaRecorder.stop();  // stop the recording
-        releaseMediaRecorder(); // release the MediaRecorder object
-      } else {
-        new MediaPrepareTask().execute(null, null, null);
-      }
-      isRecording = !isRecording;
-    }
-  };
-
-  private void releaseMediaRecorder(){
-      if (mediaRecorder != null) {
-        // clear recorder configuration
-        mediaRecorder.reset();
-        // release the recorder object
-        mediaRecorder.release();
-        mediaRecorder = null;
-        chronometer.stop();
-        buttonRecord.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_record));
-        buttonPlay.setEnabled(true);
-      }
-  }
-
-  private CompoundButton.OnCheckedChangeListener getOnCheckedChangeListener(final View viewToShow) {
-    return new CompoundButton.OnCheckedChangeListener() {
-      @Override
-      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-        if (isChecked) {
-          viewToShow.setVisibility(View.VISIBLE);
-        } else {
-          viewToShow.setVisibility(View.GONE);
-        }
-      }
-    };
-  }
-
-  private View.OnClickListener onButtonDateClickListner = new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-      new DatePickerDialog(getActivity(), pDateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-              calendar.get(Calendar.DAY_OF_MONTH)).show();
-    }
-  };
-
-  private View.OnClickListener onButtonTimeClickListner = new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        new TimePickerDialog(getActivity(), pTimeSetListener, calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE), true).show();
-      }
-    };
-
-  private void updateDateDisplay() {
-    editTextDate.setText(Formatter.date(calendar.getTimeInMillis()));
-  }
-
-  private void updateTimeDisplay() {
-    String hourOfDayText = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
-    if (hourOfDayText.length() == 1) {
-      hourOfDayText = "0" + hourOfDayText;
-    }
-    String minuteText = String.valueOf(calendar.get(Calendar.MINUTE));
-    if (minuteText.length() == 1) {
-      minuteText = "0" + minuteText;
-    }
-    editTextTime.setText(String.format("%s:%s", hourOfDayText, minuteText));
-  }
-
-  private DatePickerDialog.OnDateSetListener pDateSetListener = new DatePickerDialog.OnDateSetListener() {
-
-    public void onDateSet(DatePicker view, int year,
-                        int monthOfYear, int dayOfMonth) {
-        calendar.set(year, monthOfYear, dayOfMonth);
-      updateDateDisplay();
-    }
-  };
-
-  private TimePickerDialog.OnTimeSetListener pTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
-
-    @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-      calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-      calendar.set(Calendar.MINUTE, minute);
-      updateTimeDisplay();
-    }
-  };
-
-  public void onActivityResult(int requestCode, int resultCode, Intent data){
-    super.onActivityResult(requestCode, resultCode, data);
-    switch(requestCode) {
-      case CONTACT_SELECTED_CALL:
-      case CONTACT_SELECTED_SMS:
-        if (resultCode == Activity.RESULT_OK) {
-          Uri contactData = data.getData();
-          Cursor c = getActivity().managedQuery(contactData, null, null, null, null);
-          if (c.moveToFirst()) {
-            int contactID = c.getInt(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
-            Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-            String[] projection = new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER};
-            String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?";
-            String[] selectionArgs = new String[]{"" + contactID};
-            Cursor context = getActivity().managedQuery(uri, projection, selection, selectionArgs, null);
-            if (context.moveToFirst()) {
-              if (requestCode == CONTACT_SELECTED_CALL) {
-                editTextCall.setText(context.getString(0));
-              } else if (requestCode == CONTACT_SELECTED_SMS) {
-                editTextSMS.setText(context.getString(0));
-              }
-            }
-          }
-      }
-      break;
-      case CAMERA_PIC_REQUEST:
-        if(resultCode == Activity.RESULT_OK)
-        {
-          Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-          OutputStream writer = null;
-
-          if (note.getPhoto() != null) {
-            File oldFile = new File(note.getPhoto());
-            if (oldFile.exists()) {
-              oldFile.delete();
-            }
-          }
-
-          note.setPhoto(getNewPhotoPath());
-          File file = new File(note.getPhoto());
-          try
-          {
-            writer = new FileOutputStream(file);
-            if(!thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, writer))
-            {
-              break;
-            }
-
-            writer.flush();
-            writer.close();
-
-            imagePhoto.setImageBitmap(thumbnail);
-          }
-          catch(Exception e)
-          {
-
-              Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-              break;
-          }
-        }
-
-        break;
-      }
-    }
-  public static String getNewPhotoPath() {
-    String path;
-    path = Environment.getExternalStorageDirectory().getAbsolutePath();
-    path += "/ProNote/NotePhotos/";
-    File fPath = new File(path);
-    fPath.mkdirs();
-    path += String.valueOf(Calendar.getInstance().getTimeInMillis());
-    path += ".jpg";
-
-    return path;
-  }
 
     public void setNote(Note note) {
         this.note = note;
     }
 
 
+    public static String getNewPath() {
+        String path;
+        path = Environment.getExternalStorageDirectory().getAbsolutePath();
+        path += "/ProNote/NoteRecords/";
+        File fPath = new File(path);
+        fPath.mkdirs();
+        path += String.valueOf(Calendar.getInstance().getTimeInMillis());
+        path += ".amr";
 
-
-  public static String getNewPath() {
-  	String path;
-  	path = Environment.getExternalStorageDirectory().getAbsolutePath();
-    path += "/ProNote/NoteRecords/";
-    File fPath = new File(path);
-    fPath.mkdirs();
-    path += String.valueOf(Calendar.getInstance().getTimeInMillis());
-    path += ".amr";
-
-  	return path;
-  }
+        return path;
+    }
 
 
     @Override
@@ -481,8 +473,8 @@ public class EditFragment extends Fragment {
                     dbHelper.close();
                     updateNotification(noteId);
 
-                  Intent widgetUpdateIntent = new Intent(ProNoteWidgetProvider.UPDATE_WIDGETS);
-                  getActivity().sendBroadcast(widgetUpdateIntent);
+                    Intent widgetUpdateIntent = new Intent(ProNoteWidgetProvider.UPDATE_WIDGETS);
+                    getActivity().sendBroadcast(widgetUpdateIntent);
                     return null;
                 }
 
@@ -490,10 +482,10 @@ public class EditFragment extends Fragment {
                 protected void onPostExecute(Void result) {
                     getActivity().setProgressBarIndeterminateVisibility(false);
                     FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
-                      int backStackCount = supportFragmentManager.getBackStackEntryCount();
-                      for (int i = 0; i < backStackCount; i++) {
+                    int backStackCount = supportFragmentManager.getBackStackEntryCount();
+                    for (int i = 0; i < backStackCount; i++) {
                         supportFragmentManager.popBackStack();
-                      }
+                    }
                 }
             }.execute(getUpdatedNote());
             return true;
@@ -501,22 +493,22 @@ public class EditFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-  private void updateNotification(long noteId) {
-    Intent intent = new Intent(getActivity(), OneShotAlarm.class);
-    intent.putExtra(NotesDbAdapter.KEY_ROWID, noteId);
-    PendingIntent sender = PendingIntent.getBroadcast(getActivity(), (int) noteId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    private void updateNotification(long noteId) {
+        Intent intent = new Intent(getActivity(), OneShotAlarm.class);
+        intent.putExtra(NotesDbAdapter.KEY_ROWID, noteId);
+        PendingIntent sender = PendingIntent.getBroadcast(getActivity(), (int) noteId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-    // We want the alarm to go off 30 seconds from now.
-    if(this.note.getDateTime() >= System.currentTimeMillis()) {
-        // Schedule the alarm!
+        // We want the alarm to go off 30 seconds from now.
+        if (this.note.getDateTime() >= System.currentTimeMillis()) {
+            // Schedule the alarm!
 
-        AlarmManager am = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, this.note.getDateTime(), 0, sender);
+            AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+            am.setRepeating(AlarmManager.RTC_WAKEUP, this.note.getDateTime(), 0, sender);
+        }
     }
-  }
 
 
-  public Note getUpdatedNote() {
+    public Note getUpdatedNote() {
         note.setTitle(title.getText().toString());
 
         calendar.set(Calendar.MILLISECOND, 0);
@@ -550,52 +542,55 @@ public class EditFragment extends Fragment {
         super.onSaveInstanceState(icicle);
         icicle.putSerializable(SERIALIZABLE_NOTE, note);
     }
-  private boolean prepareVideoRecorder(){
 
-    mediaRecorder = new MediaRecorder();
+    private boolean prepareVideoRecorder() {
 
-    mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-    mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
-    mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-    note.setRecordPath(getNewPath());
-    mediaRecorder.setOutputFile(note.getRecordPath());
-    try {
-        mediaRecorder.prepare();
-    } catch (IllegalStateException e) {
-        releaseMediaRecorder();
-        return false;
-    } catch (IOException e) {
-        releaseMediaRecorder();
-        return false;
+        mediaRecorder = new MediaRecorder();
+
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.RAW_AMR);
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        note.setRecordPath(getNewPath());
+        mediaRecorder.setOutputFile(note.getRecordPath());
+        try {
+            mediaRecorder.prepare();
+        } catch (IllegalStateException e) {
+            releaseMediaRecorder();
+            return false;
+        } catch (IOException e) {
+            releaseMediaRecorder();
+            return false;
+        }
+        return true;
     }
-    return true;
-  }
-  class MediaPrepareTask extends AsyncTask<Void, Void, Boolean> {
 
-          @Override
-          protected Boolean doInBackground(Void... voids) {
-              // initialize video camera
-              if (prepareVideoRecorder()) {
-                  // Camera is available and unlocked, MediaRecorder is prepared,
-                  // now you can start recording
-                  mediaRecorder.start();
-                  isRecording = true;
-              } else {
-                  // prepare didn't work, release the camera
-                  releaseMediaRecorder();
-                  return false;
-              }
-              return true;
-          }
-          @Override
-          protected void onPostExecute(Boolean result) {
-              if (result) {
+    class MediaPrepareTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            // initialize video camera
+            if (prepareVideoRecorder()) {
+                // Camera is available and unlocked, MediaRecorder is prepared,
+                // now you can start recording
+                mediaRecorder.start();
+                isRecording = true;
+            } else {
+                // prepare didn't work, release the camera
+                releaseMediaRecorder();
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (result) {
                 chronometer.setBase(SystemClock.elapsedRealtime());
                 chronometer.start();
                 buttonRecord.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_stop));
                 buttonPlay.setEnabled(false);
-              }
-          }
+            }
+        }
 
-      }
+    }
 }

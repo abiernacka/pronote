@@ -6,7 +6,6 @@
 package pronote.application.utils;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * TODO Add class description...
@@ -14,10 +13,10 @@ import java.util.Date;
  * @author miquido
  */
 public class Formatter {
-  public static final String PATTERN_DATE = "dd-MM-yyyy";
-  public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(PATTERN_DATE);
+    public static final String PATTERN_DATE = "dd-MM-yyyy";
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(PATTERN_DATE);
 
-  public static String date(long dateTime) {
-    return DATE_FORMAT.format(dateTime);
-  }
+    public static String date(long dateTime) {
+        return DATE_FORMAT.format(dateTime);
+    }
 }

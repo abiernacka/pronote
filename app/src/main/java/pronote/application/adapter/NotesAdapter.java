@@ -12,10 +12,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import pronote.application.R;
@@ -33,24 +31,24 @@ public class NotesAdapter extends BaseAdapter {
     private LayoutInflater inflater;
 
     public NotesAdapter(LayoutInflater inflater) {
-      this.inflater = inflater;
+        this.inflater = inflater;
     }
 
-  public List<Note> getNotes() {
-    return notes;
-  }
+    public List<Note> getNotes() {
+        return notes;
+    }
 
-  public void setNotes(List<Note> notes) {
-    Collections.sort(notes, new Comparator<Note>() {
-      @Override
-      public int compare(Note lhs, Note rhs) {
-        return (int) (lhs.getDateTime() - rhs.getDateTime());
-      }
-    });
-    this.notes = notes;
-  }
+    public void setNotes(List<Note> notes) {
+        Collections.sort(notes, new Comparator<Note>() {
+            @Override
+            public int compare(Note lhs, Note rhs) {
+                return (int) (lhs.getDateTime() - rhs.getDateTime());
+            }
+        });
+        this.notes = notes;
+    }
 
-  @Override
+    @Override
     public int getCount() {
         return notes == null ? 0 : notes.size();
     }
@@ -72,17 +70,17 @@ public class NotesAdapter extends BaseAdapter {
         }
         String title = getItem(position).getTitle();
         if (TextUtils.isEmpty(title)) {
-          title = "-";
+            title = "-";
         }
 
         ((TextView) convertView.findViewById(R.id.textTitle))
                 .setText(title);
         String date = "-";
         if (getItem(position).getDateTime() != 0) {
-          date = Formatter.date(getItem(position).getDateTime());
+            date = Formatter.date(getItem(position).getDateTime());
         }
         ((TextView) convertView.findViewById(R.id.textDate))
-                      .setText(date);
+                .setText(date);
         return convertView;
     }
 }
